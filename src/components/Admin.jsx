@@ -23,7 +23,9 @@ export default function AdminPage() {
       return;
     }
     const newStudent = { name, roll, className, phone, image };
-    await axios.post('http://localhost:5000/api/students', newStudent);
+    const baseURL = import.meta.env.VITE_API_URL;
+await axios.post(`${baseURL}/api/students`, newStudent);
+
     navigate('/');
   };
 
