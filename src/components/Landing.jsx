@@ -1,18 +1,17 @@
  import { useEffect, useState, useCallback } from 'react';
-import axios from 'axios';
+import { getStudents  } from '../api';
 
 export default function LandingPage() {
   const [students, setStudents] = useState([]);
-  const baseURL = import.meta.env.VITE_API_URL;
 
   const fetchStudents = useCallback(async () => {
     try {
-      const res = await axios.get(`${baseURL}/api/students`);
-      setStudents(res.data);
+      const data = await getStudents();
+      setStudents(data);
     } catch (err) {
       console.error('Failed to fetch students:', err);
     }
-  }, [baseURL]);
+  }, []);
 
   useEffect(() => {
     fetchStudents();
@@ -20,7 +19,9 @@ export default function LandingPage() {
 
   const deleteStudent = async (id) => {
     try {
-      await axios.delete(`${baseURL}/api/students/${id}`);
+      await fetch(`${import.meta.env.VITE_API_URL}/students/${id}`, {
+        method: 'DELETE',
+      });
       fetchStudents();
     } catch (err) {
       console.error('Failed to delete student:', err);
