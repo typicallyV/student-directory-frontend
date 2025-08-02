@@ -1,28 +1,28 @@
- import { useEffect, useState, useCallback } from 'react';
-import { getStudents  } from '../api';
+ import { useEffect, useState } from 'react';
 
 export default function LandingPage() {
   const [students, setStudents] = useState([]);
 
-  const fetchStudents = useCallback(async () => {
+  const fetchStudents = async () => {
     try {
-      const data = await getStudents();
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/students`);
+      const data = await response.json();
       setStudents(data);
-    } catch (err) {
-      console.error('Failed to fetch students:', err);
+    } catch (error) {
+      console.error("Failed to fetch students:", error);
     }
-  }, []);
+  };
 
   useEffect(() => {
     fetchStudents();
-  }, [fetchStudents]);
+  }, []);
 
   const deleteStudent = async (id) => {
     try {
       await fetch(`${import.meta.env.VITE_API_URL}/students/${id}`, {
         method: 'DELETE',
       });
-      fetchStudents();
+      fetchStudents(); // Refresh after deletion
     } catch (err) {
       console.error('Failed to delete student:', err);
     }
